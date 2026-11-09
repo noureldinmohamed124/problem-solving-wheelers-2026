@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SolveLog — Problem Solving Archive</title>
+<style>
+:root{--bg:#f4f6f8;--surface:#fff;--ink:#162029;--muted:#5b6874;--border:#dde3e9;--accent:#0e7c86;--on-accent:#fff;--soft:#e9f3f4;--code-bg:#fbfcfd;
+--easy:#2f7d4f;--medium:#9a6a12;--hard:#b24a4a;--r:10px;--r-sm:6px;--sh:0 1px 2px rgba(20,32,43,.06);
+--sans:system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans Arabic",Arial,sans-serif;--serif:"Iowan Old Style","Palatino Linotype",Georgia,serif;--mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+--t-kw:#8a3ea8;--t-ty:#0e6f9c;--t-st:#a14a1d;--t-cm:#6b7780;--t-nu:#2f7d4f;--t-pp:#a0306a}
+[data-theme=dark]{--bg:#0f151b;--surface:#161e26;--ink:#e6ecf1;--muted:#93a1ad;--border:#28333d;--accent:#4fc3cc;--on-accent:#06242a;--soft:#12292d;--code-bg:#111920;
+--easy:#6cc68e;--medium:#e0b25a;--hard:#e48a8a;--sh:none;--t-kw:#c58af0;--t-ty:#6cc3ee;--t-st:#e6a074;--t-cm:#7d8b96;--t-nu:#8bd6a7;--t-pp:#e58ab8}
+*{box-sizing:border-box}html{scroll-padding-top:4.5rem}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 var(--sans);overflow-x:hidden}
+a{color:var(--accent)}h1,h2,h3{line-height:1.25;margin:0 0 .5em}h1,h2{font-family:var(--serif);font-weight:700;letter-spacing:-.01em}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+header.top{position:sticky;top:0;z-index:10;background:color-mix(in srgb,var(--bg) 90%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--border)}
+.bar{display:flex;align-items:center;gap:16px;flex-wrap:wrap;padding:10px 0}
+.brand{font:700 1.35rem var(--serif);color:var(--ink);text-decoration:none}.brand b{color:var(--accent)}
+nav{display:flex;gap:4px;overflow-x:auto;flex:1}nav a{padding:6px 12px;border-radius:var(--r-sm);color:var(--muted);text-decoration:none;white-space:nowrap}
+nav a:hover,nav a[aria-current=page]{background:var(--soft);color:var(--ink)}
+.btn{font:inherit;font-size:.92rem;padding:7px 14px;border-radius:var(--r-sm);border:1px solid var(--border);background:var(--surface);color:var(--ink);cursor:pointer;text-decoration:none;display:inline-block}
+.btn:hover{border-color:var(--accent)}.btn.pri{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}.btn.dan{color:var(--hard);border-color:var(--hard)}.btn.sm{padding:3px 9px;font-size:.82rem}
+input,select,textarea{font:inherit;width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:var(--r-sm);background:var(--surface);color:var(--ink)}
+textarea{min-height:90px;resize:vertical}textarea.big{min-height:200px}textarea.code{font:.88rem/1.5 var(--mono);min-height:280px;tab-size:4;white-space:pre}
+label{display:block;font-weight:600;font-size:.9rem;margin-bottom:4px}.fld{margin-bottom:16px}.err{color:var(--hard);font-size:.85rem;margin-top:3px}
+.hero{padding:56px 0 28px;max-width:720px}.hero h1{font-size:clamp(2rem,5vw,3rem)}.hero p{color:var(--muted);font-size:1.08rem}
+.sr{display:flex;gap:8px;margin:18px 0}.sr input{padding:12px 14px;font-size:1rem}
+.stats{display:flex;gap:12px;flex-wrap:wrap;margin:8px 0 32px}.stat{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:12px 18px;min-width:130px}
+.stat b{display:block;font:700 1.6rem var(--serif)}.stat span{color:var(--muted);font-size:.85rem}
+.filters{display:grid;grid-template-columns:2fr repeat(4,1fr) auto;gap:8px;margin-bottom:20px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:16px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:18px;box-shadow:var(--sh);display:flex;flex-direction:column;gap:8px;transition:border-color .15s,transform .15s}
+.card:hover{border-color:var(--accent);transform:translateY(-2px)}.card h3{margin:0;font-size:1.1rem}.card h3 a{color:var(--ink);text-decoration:none}
+.card p{margin:0;color:var(--muted);font-size:.92rem;flex:1}.meta{display:flex;gap:8px;flex-wrap:wrap;align-items:center;font-size:.82rem;color:var(--muted)}
+.badge{padding:1px 9px;border-radius:99px;font-size:.78rem;font-weight:600;border:1px solid currentColor}.Easy{color:var(--easy)}.Medium{color:var(--medium)}.Hard{color:var(--hard)}
+.tag{background:var(--soft);border-radius:var(--r-sm);padding:1px 8px;font-size:.78rem}
+.empty{text-align:center;padding:48px 16px;border:1px dashed var(--border);border-radius:var(--r);color:var(--muted)}
+.sec{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:20px 24px;margin:16px 0}.sec h2{font-size:1.25rem}
+.prose{white-space:pre-wrap;overflow-wrap:anywhere;max-width:74ch}.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.crumbs{margin:24px 0 8px;font-size:.9rem}.pg h1{font-size:clamp(1.7rem,4vw,2.4rem)}
+.code{border:1px solid var(--border);border-radius:var(--r-sm);background:var(--code-bg);overflow:hidden;margin:8px 0}
+.code .hd{display:flex;justify-content:space-between;align-items:center;padding:4px 8px 4px 12px;border-bottom:1px solid var(--border);font-size:.78rem;color:var(--muted)}
+.code .bd{display:flex;overflow-x:auto}.code pre{margin:0;padding:12px 14px;font:.86rem/1.55 var(--mono);tab-size:4}
+.code .gut{color:var(--t-cm);text-align:right;user-select:none;border-right:1px solid var(--border);position:sticky;left:0;background:var(--code-bg)}
+.k{color:var(--t-kw)}.y{color:var(--t-ty)}.s{color:var(--t-st)}.c{color:var(--t-cm);font-style:italic}.n{color:var(--t-nu)}.p{color:var(--t-pp)}.o{color:var(--muted)}
+.cx{display:flex;gap:12px;flex-wrap:wrap}.cx div{background:var(--soft);padding:8px 16px;border-radius:var(--r-sm)}.cx code{font-family:var(--mono);font-weight:700}
+.pn{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:16px 0 40px}
+.tw{overflow-x:auto;background:var(--surface);border:1px solid var(--border);border-radius:var(--r)}table{border-collapse:collapse;width:100%;font-size:.92rem}
+th,td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--border);white-space:nowrap}td.t{white-space:normal;min-width:180px}.acts{display:flex;gap:6px}
+.chip{font-size:.82rem;padding:3px 10px;border-radius:99px;background:var(--soft)}.chip.warn{color:var(--hard);border:1px solid var(--hard);background:none}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:12px 0}.ex{border:1px solid var(--border);border-radius:var(--r-sm);padding:12px;margin-bottom:12px}
+dialog{border:1px solid var(--border);border-radius:var(--r);background:var(--surface);color:var(--ink);max-width:min(520px,92vw);padding:22px}dialog::backdrop{background:rgba(0,0,0,.45)}
+.dact{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap;margin-top:18px}
+#toasts{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;gap:8px;z-index:50;width:min(92vw,420px)}
+.toast{background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:var(--r-sm);box-shadow:0 4px 16px rgba(0,0,0,.25)}.toast.bad{background:var(--hard);color:#fff}
+footer{color:var(--muted);font-size:.85rem;padding:32px 0}
+@media(max-width:820px){.filters{grid-template-columns:1fr 1fr}.filters>:first-child{grid-column:1/-1}.two{grid-template-columns:1fr}.sec{padding:16px}.hero{padding-top:32px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<div id="toasts" role="status" aria-live="polite"></div>
+<script id="embedded-problems" type="application/json">{"schemaVersion":1,"problems":[{"id":"26c1123c-a8ac-4008-a4c5-d5d986e839bf","title":"ببيسبيس","problemId":"بيسبيس","platform":"بيس","url":"","difficulty":"Medium","category":"يسبيسبسي","tags":["بيسب"],"shortDescription":"سيب","statement":"يسبيس","input":"","output":"","constraints":"","examples":[],"approach":"","reasoning":"","solution":"","timeComplexity":"سيب","spaceComplexity":"سيبيسب","notes":"ررءر","relatedProblems":[],"createdAt":"2026-11-09T16:59:36.121Z","updatedAt":"2026-11-09T16:59:36.121Z"}]}</script>
+<script>
+"use strict";
+/* Snapshot the pristine document before anything renders; Export HTML is built from this. */
+const SOURCE_HTML = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
+const DATA_OPEN = '<script id="embedded-problems" type="application/json">', DATA_CLOSE = '<\/script>';
+const SCHEMA = 1, DIFFS = ["Easy", "Medium", "Hard"], DRAFT_KEY = "solvelog.draft.v1", BACKUP_KEY = "solvelog.draftBackup", THEME_KEY = "solvelog.theme";
+const IS_LOCAL = window.location.protocol === "file:"; // authoring convenience only, not security
+
+/* ---------- Utilities ---------- */
+function h(tag, a, ...kids) {
+  const e = document.createElement(tag);
+  for (const k in a || {}) { const v = a[k]; if (v == null || v === false) continue;
+    if (k === "class") e.className = v; else if (k === "text") e.textContent = v;
+    else if (k.startsWith("on")) e.addEventListener(k.slice(2), v); else e.setAttribute(k, v === true ? "" : v); }
+  for (const c of kids.flat(Infinity)) if (c != null && c !== false) e.append(c);
+  return e;
+}
+const $ = (s, r = document) => r.querySelector(s);
+const uniq = a => [...new Set(a)];
+const nowISO = () => new Date().toISOString();
+const fmtDate = s => s ? new Date(s).toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" }) : "";
+function fingerprint(problems) { // FNV-1a over canonical JSON
+  const s = JSON.stringify(problems); let x = 0x811c9dc5;
+  for (let i = 0; i < s.length; i++) { x ^= s.charCodeAt(i); x = Math.imul(x, 16777619) >>> 0; }
+  return x.toString(16) + ":" + s.length;
+}
+function serialize(data) { return JSON.stringify(data).replace(/</g, "\\u003c").replace(/\u2028/g, "\\u2028").replace(/\u2029/g, "\\u2029"); }
+function download(name, text, type) {
+  const url = URL.createObjectURL(new Blob([text], { type }));
+  const a = h("a", { href: url, download: name }); document.body.append(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 2000);
+}
+function copyText(text) {
+  const done = () => Toast.show("Copied to clipboard");
+  if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(text).then(done, () => fallback());
+  else fallback();
+  function fallback() { const t = h("textarea", { style: "position:fixed;opacity:0" }); t.value = text; document.body.append(t); t.select();
+    try { document.execCommand("copy"); done(); } catch (e) { Toast.show("Copy failed — select the text manually", true); } t.remove(); }
+}
+function uid(existing) {
+  let id; do { id = (crypto.randomUUID ? crypto.randomUUID() : "p-" + Date.now().toString(36) + Math.random().toString(36).slice(2, 10)); } while (existing.has(id));
+  return id;
+}
+
+/* ---------- Toasts & dialogs ---------- */
+const Toast = { show(msg, bad) { const t = h("div", { class: "toast" + (bad ? " bad" : ""), text: msg }); $("#toasts").append(t); setTimeout(() => t.remove(), bad ? 6000 : 3000); } };
+function ask({ title, body, actions }) { // resolves with the clicked action's value, or null on Esc
+  return new Promise(res => {
+    const d = h("dialog", { "aria-labelledby": "dlg-t" }, h("h2", { id: "dlg-t", text: title }), h("div", {}, body),
+      h("div", { class: "dact" }, actions.map(a => h("button", { class: "btn " + (a.kind || ""), type: "button", onclick: () => d.close(a.value) }, a.label))));
+    d.addEventListener("close", () => { const v = d.returnValue; d.remove(); res(v === "" ? null : v); });
+    document.body.append(d); d.showModal();
+  });
+}
+const confirmDlg = (title, text, label, kind) => ask({ title, body: h("p", { text }), actions: [{ label: "Cancel", value: "no" }, { label, kind: kind || "pri", value: "yes" }] }).then(v => v === "yes");
+
+/* ---------- Validation / normalization ---------- */
+const str = v => typeof v === "string" ? v : (v == null ? "" : String(v));
+function normalizeProblem(p, existingIds) {
+  if (!p || typeof p !== "object" || Array.isArray(p)) throw new Error("Problem entry is not an object.");
+  const title = str(p.title).trim(); if (!title) throw new Error("A problem is missing its title.");
+  if (!DIFFS.includes(p.difficulty)) throw new Error(`"${title}": difficulty must be Easy, Medium or Hard.`);
+  if (!str(p.category).trim()) throw new Error(`"${title}": category is required.`);
+  const now = nowISO();
+  return {
+    id: str(p.id) || uid(existingIds || new Set()), title, problemId: str(p.problemId).trim(), platform: str(p.platform).trim(), url: str(p.url).trim(),
+    difficulty: p.difficulty, category: str(p.category).trim(), tags: (Array.isArray(p.tags) ? p.tags : []).map(t => str(t).trim()).filter(Boolean),
+    shortDescription: str(p.shortDescription), statement: str(p.statement), input: str(p.input), output: str(p.output), constraints: str(p.constraints),
+    examples: (Array.isArray(p.examples) ? p.examples : []).map(e => ({ input: str(e && e.input), output: str(e && e.output), explanation: str(e && e.explanation) })),
+    approach: str(p.approach), reasoning: str(p.reasoning), solution: str(p.solution), timeComplexity: str(p.timeComplexity), spaceComplexity: str(p.spaceComplexity),
+    notes: str(p.notes), relatedProblems: (Array.isArray(p.relatedProblems) ? p.relatedProblems : []).map(str), createdAt: str(p.createdAt) || now, updatedAt: str(p.updatedAt) || str(p.createdAt) || now
+  };
+}
+function normalizeDataset(raw) {
+  if (!raw || typeof raw !== "object" || !Array.isArray(raw.problems)) throw new Error("File is not a SolveLog dataset (missing problems array).");
+  if (raw.schemaVersion !== SCHEMA) throw new Error(`Unsupported schema version ${raw.schemaVersion}; this app reads version ${SCHEMA}.`);
+  const seen = new Set(), out = [];
+  for (const p of raw.problems) { const n = normalizeProblem(p, seen); if (seen.has(n.id)) throw new Error(`Duplicate internal id "${n.id}" in dataset.`); seen.add(n.id); out.push(n); }
+  return out;
+}
+function validUrl(u) { try { const x = new URL(u); return x.protocol === "http:" || x.protocol === "https:"; } catch (e) { return false; } }
+
+/* ---------- Storage (best-effort localStorage) ---------- */
+const Storage = {
+  ok: true,
+  read(k) { try { return localStorage.getItem(k); } catch (e) { this.ok = false; return null; } },
+  write(k, v) { try { localStorage.setItem(k, v); return true; } catch (e) { this.ok = false; return false; } },
+  remove(k) { try { localStorage.removeItem(k); } catch (e) { /* ignore */ } }
+};
+
+/* ---------- Data store ---------- */
+const Store = {
+  problems: [], baseFp: "", unsafe: false, // unsafe = changes exist that are not persisted anywhere
+  loadEmbedded() {
+    try { return normalizeDataset(JSON.parse($("#embedded-problems").textContent)); }
+    catch (e) { Toast.show("Embedded dataset is invalid: " + e.message, true); return []; }
+  },
+  async init() {
+    const embedded = this.loadEmbedded(), efp = fingerprint(embedded);
+    this.problems = embedded; this.baseFp = efp;
+    if (!IS_LOCAL) return;
+    const raw = Storage.read(DRAFT_KEY); if (!raw) return;
+    let draft; try { draft = { ...JSON.parse(raw) }; draft.list = normalizeDataset(draft.data); } catch (e) { Toast.show("Saved draft is unreadable and was left untouched.", true); return; }
+    if (fingerprint(draft.list) === efp) { this.baseFp = efp; return; } // draft equals embedded
+    if (draft.base === efp) { this.problems = draft.list; return; }       // normal case: draft built on this file
+    const choice = await ask({ title: "Saved draft differs from this file",
+      body: [h("p", { text: `This browser holds a local draft (${draft.list.length} problems, saved ${fmtDate(draft.savedAt)}) that was not based on this file's embedded dataset (${embedded.length} problems).` }),
+        h("p", { text: "Recover draft: continue with the draft. The embedded data stays in the file. Use embedded: start from this file; the draft is kept as a backup in this browser." })],
+      actions: [{ label: "Use embedded", value: "emb" }, { label: "Recover draft", kind: "pri", value: "draft" }] });
+    if (choice === "draft") { this.problems = draft.list; this.baseFp = draft.base; } // keep its base so the mismatch remains visible
+    else { Storage.write(BACKUP_KEY, raw); Storage.write(DRAFT_KEY, JSON.stringify({ base: efp, savedAt: nowISO(), data: { schemaVersion: SCHEMA, problems: embedded } })); }
+  },
+  persist() {
+    const ok = Storage.write(DRAFT_KEY, JSON.stringify({ base: this.baseFp, savedAt: nowISO(), data: { schemaVersion: SCHEMA, problems: this.problems } }));
+    this.unsafe = !ok; Admin.refreshStatus(); return ok;
+  },
+  commit(msg) { // explicit user action: apply + persist
+    const ok = this.persist();
+    Toast.show(ok ? msg : "Saved in memory only — browser storage is unavailable. Export before closing.", !ok);
+  },
+  save(p) { const i = this.problems.findIndex(x => x.id === p.id); if (i < 0) this.problems.push(p); else this.problems[i] = p; this.commit("Problem saved"); },
+  remove(id) { this.problems = this.problems.filter(p => p.id !== id); this.commit("Problem deleted"); },
+  get(id) { return this.problems.find(p => p.id === id); },
+  dataset() { return { schemaVersion: SCHEMA, problems: this.problems }; }
+};
+
+/* ---------- Import / Export ---------- */
+const IO = {
+  exportHTML() {
+    try {
+      const list = normalizeDataset(Store.dataset());
+      const s = SOURCE_HTML.indexOf(DATA_OPEN); if (s < 0) throw new Error("Embedded data element not found in source.");
+      const e = SOURCE_HTML.indexOf(DATA_CLOSE, s + DATA_OPEN.length); if (e < 0) throw new Error("Embedded data element is not terminated.");
+      const html = SOURCE_HTML.slice(0, s + DATA_OPEN.length) + serialize({ schemaVersion: SCHEMA, problems: list }) + SOURCE_HTML.slice(e);
+      const check = JSON.parse(html.slice(s + DATA_OPEN.length, html.indexOf(DATA_CLOSE, s + DATA_OPEN.length))); // verify round-trip
+      if (fingerprint(normalizeDataset(check)) !== fingerprint(list)) throw new Error("Round-trip verification failed.");
+      download("index.html", html, "text/html");
+      Store.baseFp = fingerprint(list); Store.persist(); // draft now based on the exported dataset
+      Toast.show("Exported index.html — upload it to GitHub Pages");
+    } catch (err) { Toast.show("Export failed: " + err.message, true); }
+  },
+  exportJSON() { download("solvelog-backup-" + new Date().toISOString().slice(0, 10) + ".json", JSON.stringify(Store.dataset(), null, 2), "application/json"); Toast.show("JSON backup downloaded"); },
+  importJSON() {
+    const inp = h("input", { type: "file", accept: ".json,application/json" });
+    inp.addEventListener("change", async () => {
+      const f = inp.files[0]; if (!f) return;
+      let incoming; try { incoming = normalizeDataset(JSON.parse(await f.text())); } catch (err) { Toast.show("Import rejected: " + err.message, true); return; }
+      const have = new Set(Store.problems.map(p => p.id)), dupes = incoming.filter(p => have.has(p.id)).length;
+      const choice = await ask({ title: "Import preview", body: [h("p", { text: `${incoming.length} problems in file; ${dupes} share an ID with your current ${Store.problems.length}.` }),
+        h("p", { text: "Merge keeps your problems and overwrites those with matching IDs. Replace discards the current working dataset." })],
+        actions: [{ label: "Cancel", value: "no" }, { label: "Merge", value: "merge" }, { label: "Replace all", kind: "dan", value: "replace" }] });
+      if (choice === "merge") { const m = new Map(Store.problems.map(p => [p.id, p])); incoming.forEach(p => m.set(p.id, p)); Store.problems = [...m.values()]; Store.commit("Imported and merged"); Router.render(); }
+      else if (choice === "replace") { if (await confirmDlg("Replace everything?", `This replaces all ${Store.problems.length} current problems with ${incoming.length} imported ones. Export a backup first if unsure.`, "Replace", "dan")) { Store.problems = incoming; Store.commit("Dataset replaced"); Router.render(); } }
+    });
+    inp.click();
+  }
+};
+
+/* ---------- C++ syntax highlighter (tokenizer, no regex replace on HTML) ---------- */
+const KW = new Set("alignas alignof and asm auto break case catch class const consteval constexpr const_cast continue decltype default delete do dynamic_cast else enum explicit export extern false for friend goto if inline mutable namespace new noexcept not nullptr operator or private protected public register reinterpret_cast return sizeof static static_assert static_cast struct switch template this throw true try typedef typeid typename union using virtual volatile while xor override final".split(" "));
+const TY = new Set("void bool char short int long float double signed unsigned wchar_t size_t int8_t int16_t int32_t int64_t uint8_t uint16_t uint32_t uint64_t ll ull string string_view vector array deque list forward_list set multiset map multimap unordered_set unordered_map unordered_multiset unordered_multimap stack queue priority_queue pair tuple bitset optional variant function iterator shared_ptr unique_ptr weak_ptr istream ostream stringstream ifstream ofstream cin cout cerr endl std".split(" "));
+const RULES = [["c", /\/\*[\s\S]*?(?:\*\/|$)/y], ["c", /\/\/[^\n]*/y], ["p", /#[ \t]*include[ \t]*(?:<[^>\n]*>|"[^"\n]*")/y], ["p", /#[ \t]*[A-Za-z_]+/y],
+  ["s", /(?:u8|[uUL])?"(?:\\.|[^"\\\n])*"?/y], ["s", /'(?:\\.|[^'\\\n])*'?/y],
+  ["n", /(?:0[xX][\da-fA-F']+|0[bB][01']+|(?:\d[\d']*\.?[\d']*|\.\d+)(?:[eE][+-]?\d+)?)[uUlLfF]*/y],
+  ["i", /[A-Za-z_]\w*/y], ["o", /[+\-*\/%=<>!&|^~?:.]+/y], ["o", /[{}()\[\];,]/y]];
+function tokenizeCpp(src) {
+  const out = []; let i = 0;
+  while (i < src.length) {
+    let hit = null;
+    for (const [cls, re] of RULES) { re.lastIndex = i; const m = re.exec(src); if (m && m[0].length) { hit = [cls, m[0]]; break; } }
+    if (!hit) hit = ["", src[i]];
+    let cls = hit[0]; if (cls === "i") cls = KW.has(hit[1]) ? "k" : TY.has(hit[1]) ? "y" : "";
+    out.push([cls, hit[1]]); i += hit[1].length;
+  }
+  return out;
+}
+function highlightCpp(src) { const f = document.createDocumentFragment();
+  for (const [cls, t] of tokenizeCpp(src)) f.append(cls ? h("span", { class: cls, text: t }) : document.createTextNode(t)); return f; }
+function codeBlock(src, label) {
+  const lines = src.replace(/\r\n?/g, "\n").replace(/\n$/, "").split("\n").length;
+  return h("div", { class: "code" }, h("div", { class: "hd" }, h("span", { text: label || "C++" }), h("button", { class: "btn sm", type: "button", onclick: () => copyText(src) }, label ? "Copy" : "Copy code")),
+    h("div", { class: "bd", tabindex: "0", role: "region", "aria-label": (label || "C++") + " code" }, h("pre", { class: "gut", "aria-hidden": "true", text: Array.from({ length: lines }, (_, i) => i + 1).join("\n") }),
+      h("pre", {}, h("code", {}, highlightCpp(src.replace(/\r\n?/g, "\n").replace(/\n$/, ""))))));
+}
+
+/* ---------- Search / filters ---------- */
+const Search = {
+  cache: new WeakMap(),
+  hay(p) { let v = this.cache.get(p); if (!v) { v = [p.title, p.problemId, p.platform, p.category, p.tags.join(" "), p.shortDescription, p.statement, p.approach, p.reasoning, p.notes].join("\n").toLowerCase(); this.cache.set(p, v); } return v; },
+  run(list, f) {
+    const terms = f.q.toLowerCase().split(/\s+/).filter(Boolean);
+    let r = list.filter(p => (!f.cat || p.category === f.cat) && (!f.diff || p.difficulty === f.diff) && (!f.plat || p.platform === f.plat) && (!f.tag || p.tags.includes(f.tag)) && terms.every(t => this.hay(p).includes(t)));
+    const cmp = { newest: (a, b) => b.createdAt.localeCompare(a.createdAt), oldest: (a, b) => a.createdAt.localeCompare(b.createdAt), alpha: (a, b) => a.title.localeCompare(b.title),
+      diff: (a, b) => DIFFS.indexOf(a.difficulty) - DIFFS.indexOf(b.difficulty) || a.title.localeCompare(b.title) }[f.sort];
+    return r.sort(cmp);
+  }
+};
+const Filters = { q: "", cat: "", diff: "", plat: "", tag: "", sort: "newest" };
+
+/* ---------- Theme ---------- */
+const Theme = {
+  init() { const s = Storage.read(THEME_KEY); this.set(s || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"), false); },
+  set(t, save) { document.documentElement.dataset.theme = t; if (save) Storage.write(THEME_KEY, t); },
+  toggle() { this.set(document.documentElement.dataset.theme === "dark" ? "light" : "dark", true); }
+};
+
+/* ---------- Views (public) ---------- */
+const View = {
+  badge: d => h("span", { class: "badge " + d, text: d }),
+  card(p) {
+    return h("article", { class: "card" }, h("div", { class: "meta" }, this.badge(p.difficulty), h("span", { text: p.category })),
+      h("h3", {}, h("a", { href: "#/problem/" + encodeURIComponent(p.id), text: p.title })), h("p", { text: p.shortDescription }),
+      h("div", { class: "meta" }, p.platform && h("span", { text: p.platform + (p.problemId ? " #" + p.problemId : "") })),
+      h("div", { class: "meta" }, p.tags.slice(0, 4).map(t => h("span", { class: "tag", text: t }))),
+      h("a", { class: "btn sm", href: "#/problem/" + encodeURIComponent(p.id), style: "align-self:flex-start" }, "View solution"));
+  },
+  stats() {
+    const P = Store.problems, d = DIFFS.map(x => P.filter(p => p.difficulty === x).length);
+    const s = (n, l) => h("div", { class: "stat" }, h("b", { text: String(n) }), h("span", { text: l }));
+    return h("div", { class: "stats" }, s(P.length, "problems"), s(uniq(P.map(p => p.category)).length, "categories"), s(uniq(P.map(p => p.platform).filter(Boolean)).length, "platforms"),
+      s(d.join(" / "), "easy / medium / hard"));
+  },
+  browse() {
+    const P = Store.problems, grid = h("div", { class: "grid" }), count = h("p", { class: "meta", "aria-live": "polite" });
+    const sel = (key, label, vals) => { const s = h("select", { "aria-label": label }, h("option", { value: "", text: label }), vals.map(v => h("option", { value: v, text: v })));
+      s.value = Filters[key]; s.addEventListener("change", () => { Filters[key] = s.value; draw(); }); return s; };
+    const q = h("input", { type: "search", "aria-label": "Search problems", placeholder: "Search title, ID, tags, explanations…" }); q.value = Filters.q;
+    q.addEventListener("input", () => { Filters.q = q.value; draw(); });
+    const sort = h("select", { "aria-label": "Sort" }, [["newest", "Newest first"], ["oldest", "Oldest first"], ["alpha", "Alphabetical"], ["diff", "Difficulty"]].map(([v, l]) => h("option", { value: v, text: l })));
+    sort.value = Filters.sort; sort.addEventListener("change", () => { Filters.sort = sort.value; draw(); });
+    const bar = h("div", { class: "filters", role: "search" }, q, sel("cat", "All categories", uniq(P.map(p => p.category)).sort()), sel("diff", "All difficulties", DIFFS),
+      sel("plat", "All platforms", uniq(P.map(p => p.platform).filter(Boolean)).sort()), sort,
+      h("button", { class: "btn", type: "button", onclick: () => { Object.assign(Filters, { q: "", cat: "", diff: "", plat: "", tag: "", sort: "newest" }); Router.render(); } }, "Clear filters"));
+    function draw() {
+      const r = Search.run(P, Filters); grid.replaceChildren(...r.map(p => View.card(p)));
+      count.textContent = Filters.tag ? `${r.length} shown · tag: ${Filters.tag}` : `${r.length} of ${P.length} problems`;
+      if (!r.length) grid.replaceChildren(h("div", { class: "empty", style: "grid-column:1/-1" }, h("h3", { text: P.length ? "No problems match these filters" : "The archive is empty" }),
+        h("p", { text: P.length ? "Try a different keyword or clear the filters." : (IS_LOCAL ? "Add your first problem from the admin area." : "Nothing has been published yet.") }),
+        !P.length && IS_LOCAL && h("a", { class: "btn pri", href: "#/admin/new" }, "Add a problem")));
+    }
+    draw(); return h("section", { id: "problems", "aria-labelledby": "ph" }, h("h2", { id: "ph", text: "Problems" }), bar, count, grid);
+  },
+  home() {
+    const q = h("input", { type: "search", "aria-label": "Search problems", placeholder: "Search by title, ID or keyword" }); q.value = Filters.q;
+    const go = () => { Filters.q = q.value; location.hash = "#/problems"; };
+    q.addEventListener("keydown", e => { if (e.key === "Enter") go(); });
+    return [h("div", { class: "hero" }, h("h1", { text: "Every problem I solve, explained the way I wish it had been explained to me." }),
+      h("p", { text: "A growing archive of algorithm and data-structure problems with my reasoning, dead ends, complexity analysis and C++ solutions. Browse, search, and borrow the ideas." }),
+      h("div", { class: "sr" }, q, h("button", { class: "btn pri", type: "button", onclick: go }, "Search"))), this.stats(), this.browse()];
+  },
+  detail(id) {
+    const p = Store.get(id);
+    if (!p) return h("div", { class: "empty", style: "margin-top:40px" }, h("h2", { text: "Problem not found" }), h("p", { text: "This link may be outdated or the problem was removed." }), h("a", { class: "btn pri", href: "#/problems" }, "Browse problems"));
+    const sec = (title, ...c) => h("section", { class: "sec" }, h("h2", { text: title }), c);
+    const prose = t => h("div", { class: "prose", text: t });
+    const idx = Store.problems.indexOf(p), prev = Store.problems[idx - 1], next = Store.problems[idx + 1];
+    const rel = Store.problems.filter(x => x !== p).map(x => ({ x, s: (x.category === p.category ? 2 : 0) + x.tags.filter(t => p.tags.includes(t)).length })).filter(r => r.s > 0).sort((a, b) => b.s - a.s).slice(0, 4).map(r => r.x);
+    const link = (x, lbl) => x ? h("a", { class: "btn", href: "#/problem/" + encodeURIComponent(x.id) }, lbl + ": " + x.title) : h("span");
+    const exs = p.examples.filter(e => e.input || e.output || e.explanation);
+    return h("article", { class: "pg" }, h("div", { class: "crumbs" }, h("a", { href: "#/problems" }, "← All problems")),
+      h("header", {}, h("div", { class: "meta" }, this.badge(p.difficulty), h("span", { text: p.category }), p.platform && h("span", { text: p.platform + (p.problemId ? " #" + p.problemId : "") })),
+        h("h1", { text: p.title }), h("div", { class: "row" }, p.tags.map(t => h("a", { class: "tag", href: "#/problems", onclick: () => { Filters.tag = t; }, text: t })),
+          p.url && validUrl(p.url) && h("a", { class: "btn sm", href: p.url, target: "_blank", rel: "noopener noreferrer" }, "Original problem ↗"),
+          h("button", { class: "btn sm", type: "button", onclick: () => copyText(location.href) }, "Copy problem link"))),
+      p.statement && sec("Problem statement", prose(p.statement)),
+      (p.input || p.output) && h("div", { class: "two" }, p.input && sec("Input", prose(p.input)), p.output && sec("Output", prose(p.output))),
+      p.constraints && sec("Constraints", h("ul", {}, p.constraints.split("\n").filter(l => l.trim()).map(l => h("li", { text: l })))),
+      exs.length && sec("Examples", exs.map((e, i) => h("div", { class: "ex" }, h("h3", { text: "Example " + (i + 1) }), e.input && codeBlock(e.input, "Input"), e.output && codeBlock(e.output, "Output"), e.explanation && prose(e.explanation)))),
+      p.approach && sec("Approach", prose(p.approach)), p.reasoning && sec("Reasoning", prose(p.reasoning)),
+      p.solution && sec("C++ solution", codeBlock(p.solution)),
+      (p.timeComplexity || p.spaceComplexity) && sec("Complexity", h("div", { class: "cx" }, p.timeComplexity && h("div", {}, "Time ", h("code", { text: p.timeComplexity })), p.spaceComplexity && h("div", {}, "Space ", h("code", { text: p.spaceComplexity })))),
+      p.notes && sec("Personal notes", prose(p.notes)),
+      h("div", { class: "pn" }, link(prev, "← Previous"), link(next, "Next →")),
+      rel.length ? h("section", {}, h("h2", { text: "Related problems" }), h("div", { class: "grid" }, rel.map(x => this.card(x)))) : null);
+  }
+};
+
+/* ---------- Admin ---------- */
+const Admin = {
+  statusEl: null, formDirty: false, af: { q: "", cat: "", diff: "" },
+  refreshStatus() { if (!this.statusEl) return; const warn = Store.unsafe || !Storage.ok;
+    this.statusEl.className = "chip" + (warn ? " warn" : ""); this.statusEl.textContent = warn ? "Not saved in browser — export before closing" : "Draft saved in this browser"; },
+  dashboard() {
+    const P = Store.problems; this.statusEl = h("span"); this.refreshStatus();
+    const recent = [...P].sort((a, b) => b.updatedAt.localeCompare(a.updatedAt)).slice(0, 5);
+    const catSel = h("select", { "aria-label": "Filter by category" }, h("option", { value: "", text: "All categories" }), uniq(P.map(p => p.category)).sort().map(c => h("option", { value: c, text: c })));
+    const difSel = h("select", { "aria-label": "Filter by difficulty" }, h("option", { value: "", text: "All difficulties" }), DIFFS.map(c => h("option", { value: c, text: c })));
+    const q = h("input", { type: "search", "aria-label": "Search problems", placeholder: "Search problems" });
+    catSel.value = this.af.cat; difSel.value = this.af.diff; q.value = this.af.q;
+    const tbody = h("tbody");
+    const draw = () => { this.af = { q: q.value, cat: catSel.value, diff: difSel.value };
+      const r = Search.run(P, { ...Filters, q: q.value, cat: catSel.value, diff: difSel.value, plat: "", tag: "", sort: "newest" });
+      tbody.replaceChildren(...(r.length ? r.map(p => h("tr", {}, h("td", { class: "t", text: p.title }), h("td", { text: p.problemId }), h("td", { text: p.category }), h("td", {}, View.badge(p.difficulty)), h("td", { text: fmtDate(p.updatedAt) }),
+        h("td", {}, h("div", { class: "acts" }, h("a", { class: "btn sm", href: "#/admin/edit/" + encodeURIComponent(p.id) }, "Edit"), h("a", { class: "btn sm", href: "#/problem/" + encodeURIComponent(p.id) }, "View"),
+          h("button", { class: "btn sm dan", type: "button", onclick: () => this.del(p) }, "Delete"))))) : [h("tr", {}, h("td", { colspan: "6", text: P.length ? "No problems match." : "No problems yet — add your first one." }))])); };
+    [q, catSel, difSel].forEach(e => e.addEventListener("input", draw)); draw();
+    const stat = (n, l) => h("div", { class: "stat" }, h("b", { text: String(n) }), h("span", { text: l }));
+    return h("div", { class: "pg" }, h("h1", { style: "margin-top:28px", text: "Admin" }), this.statusEl,
+      h("div", { class: "stats" }, stat(P.length, "problems"), stat(uniq(P.map(p => p.category)).length, "categories"), stat(uniq(P.map(p => p.platform).filter(Boolean)).length, "platforms")),
+      h("div", { class: "row" }, h("a", { class: "btn pri", href: "#/admin/new" }, "Add problem"), h("button", { class: "btn", type: "button", onclick: () => Store.commit("Draft saved") }, "Save draft"),
+        h("button", { class: "btn pri", type: "button", onclick: () => IO.exportHTML() }, "Export Updated HTML"), h("button", { class: "btn", type: "button", onclick: () => IO.exportJSON() }, "Export JSON backup"),
+        h("button", { class: "btn", type: "button", onclick: () => IO.importJSON() }, "Import JSON")),
+      h("p", { class: "meta", text: "Publish: export updated HTML, then upload it as index.html to your GitHub Pages repository." }),
+      recent.length ? h("p", { class: "meta" }, "Recently updated: ", recent.map(p => h("a", { href: "#/admin/edit/" + encodeURIComponent(p.id), text: p.title }))) : null,
+      h("div", { class: "filters", style: "grid-template-columns:2fr 1fr 1fr" }, q, catSel, difSel),
+      h("div", { class: "tw" }, h("table", {}, h("thead", {}, h("tr", {}, ["Title", "ID", "Category", "Difficulty", "Updated", "Actions"].map(t => h("th", { text: t })))), tbody)));
+  },
+  async del(p) {
+    if (await confirmDlg(`Delete "${p.title}"?`, "This removes the problem from the current working dataset. Export a JSON backup first if you may want it back.", "Delete", "dan")) { Store.remove(p.id); Router.render(); }
+  },
+  form(id) {
+    const existing = id ? Store.get(id) : null;
+    if (id && !existing) return h("div", { class: "empty", style: "margin-top:40px" }, h("h2", { text: "Problem not found" }), h("a", { class: "btn pri", href: "#/admin" }, "Back to admin"));
+    const p = existing ? JSON.parse(JSON.stringify(existing)) : { title: "", problemId: "", platform: "", url: "", difficulty: "Easy", category: "", tags: [], shortDescription: "", statement: "", input: "", output: "", constraints: "", examples: [{ input: "", output: "", explanation: "" }], approach: "", reasoning: "", solution: "", timeComplexity: "", spaceComplexity: "", notes: "" };
+    this.formDirty = false; const els = {}, errs = {};
+    const dl = (n, vals) => h("datalist", { id: n }, uniq(vals).filter(Boolean).sort().map(v => h("option", { value: v })));
+    const field = (key, label, kind, extra) => { let el;
+      if (kind === "select") el = h("select", { id: "f-" + key }, DIFFS.map(d => h("option", { value: d, text: d })));
+      else if (kind === "area" || kind === "big" || kind === "code") el = h("textarea", { id: "f-" + key, class: kind === "area" ? "" : kind, spellcheck: kind === "code" ? "false" : null });
+      else el = h("input", { id: "f-" + key, type: kind === "url" ? "url" : "text", list: extra && extra.list });
+      el.value = key === "tags" ? p.tags.join(", ") : p[key]; els[key] = el; errs[key] = h("div", { class: "err", role: "alert" });
+      return h("div", { class: "fld" }, h("label", { for: "f-" + key, text: label }), el, errs[key]); };
+    const exBox = h("div"); let exs = p.examples;
+    const drawEx = () => exBox.replaceChildren(...exs.map((e, i) => h("div", { class: "ex" }, h("strong", { text: "Example " + (i + 1) }),
+      ...[["input", "Input"], ["output", "Output"], ["explanation", "Explanation"]].map(([k, l]) => { const t = h("textarea", { "aria-label": `Example ${i + 1} ${l}`, placeholder: l, style: "margin-top:8px;min-height:64px" }); t.value = e[k]; t.addEventListener("input", () => { e[k] = t.value; }); return t; }),
+      h("div", { class: "row" }, h("button", { class: "btn sm", type: "button", disabled: i === 0, onclick: () => { [exs[i - 1], exs[i]] = [exs[i], exs[i - 1]]; Admin.formDirty = true; drawEx(); } }, "Move up"),
+        h("button", { class: "btn sm", type: "button", disabled: i === exs.length - 1, onclick: () => { [exs[i + 1], exs[i]] = [exs[i], exs[i + 1]]; Admin.formDirty = true; drawEx(); } }, "Move down"),
+        h("button", { class: "btn sm dan", type: "button", onclick: () => { exs.splice(i, 1); Admin.formDirty = true; drawEx(); } }, "Remove")))));
+    drawEx();
+    const form = h("form", { novalidate: true, class: "pg" }, h("h1", { style: "margin-top:28px", text: existing ? "Edit problem" : "New problem" }),
+      field("title", "Problem title *", "text"), h("div", { class: "two" }, field("problemId", "Problem ID (on its platform)", "text"), field("platform", "Platform / source", "text", { list: "dl-plat" })),
+      field("url", "Problem URL", "url"), h("div", { class: "two" }, field("difficulty", "Difficulty *", "select"), field("category", "Category *", "text", { list: "dl-cat" })),
+      field("tags", "Tags (comma-separated)", "text"), field("shortDescription", "Short description", "area"), field("statement", "Problem statement", "big"),
+      h("div", { class: "two" }, field("input", "Input description", "area"), field("output", "Output description", "area")), field("constraints", "Constraints (one per line)", "area"),
+      h("h2", { text: "Examples" }), exBox, h("button", { class: "btn", type: "button", onclick: () => { exs.push({ input: "", output: "", explanation: "" }); Admin.formDirty = true; drawEx(); } }, "Add example"),
+      h("div", { style: "height:16px" }), field("approach", "Approach", "big"), field("reasoning", "Reasoning", "big"), field("solution", "C++ solution", "code"),
+      h("div", { class: "two" }, field("timeComplexity", "Time complexity", "text"), field("spaceComplexity", "Space complexity", "text")), field("notes", "Personal notes", "big"),
+      dl("dl-plat", Store.problems.map(x => x.platform)), dl("dl-cat", Store.problems.map(x => x.category)),
+      h("div", { class: "row" }, h("button", { class: "btn pri", type: "submit" }, "Save problem"), h("button", { class: "btn", type: "button", onclick: () => { location.hash = "#/admin"; } }, "Cancel")));
+    form.addEventListener("input", () => { this.formDirty = true; });
+    form.addEventListener("keydown", e => { if (e.key === "Tab" && e.target.classList.contains("code") && !e.shiftKey && e.ctrlKey) { /* Ctrl+Tab left to browser */ } });
+    form.addEventListener("submit", ev => {
+      ev.preventDefault(); Object.values(errs).forEach(e => { e.textContent = ""; }); let bad = null;
+      const fail = (k, m) => { errs[k].textContent = m; bad = bad || els[k]; };
+      const title = els.title.value.trim(), cat = els.category.value.trim(), url = els.url.value.trim();
+      if (!title) fail("title", "Enter a title."); if (!cat) fail("category", "Enter or choose a category."); if (url && !validUrl(url)) fail("url", "Enter a full http(s) URL, or leave empty.");
+      if (bad) { bad.focus(); return; }
+      const val = k => els[k].value, now = nowISO();
+      const rec = normalizeProblem({ id: existing ? existing.id : uid(new Set(Store.problems.map(x => x.id))), title, problemId: val("problemId"), platform: val("platform"), url, difficulty: val("difficulty"), category: cat,
+        tags: val("tags").split(",").map(s => s.trim()).filter(Boolean), shortDescription: val("shortDescription"), statement: val("statement"), input: val("input"), output: val("output"), constraints: val("constraints"),
+        examples: exs.filter(e => e.input || e.output || e.explanation), approach: val("approach"), reasoning: val("reasoning"), solution: val("solution"), timeComplexity: val("timeComplexity"), spaceComplexity: val("spaceComplexity"), notes: val("notes"),
+        relatedProblems: existing ? existing.relatedProblems : [], createdAt: existing ? existing.createdAt : now, updatedAt: now });
+      Store.save(rec); this.formDirty = false; location.hash = "#/admin";
+    });
+    return form;
+  }
+};
+
+/* ---------- Router ---------- */
+const Router = {
+  current: "", ignore: false,
+  parse() { const parts = (location.hash.replace(/^#\/?/, "") || "").split("/").map(decodeURIComponent); return parts; },
+  async onHashChange() {
+    if (this.ignore) { this.ignore = false; return; }
+    if (Admin.formDirty) {
+      const target = location.hash; this.ignore = true; location.hash = this.current;
+      const ok = await confirmDlg("Discard unsaved changes?", "The problem form has changes that have not been saved.", "Discard changes", "dan");
+      if (!ok) return; Admin.formDirty = false; this.ignore = true; location.hash = target; this.ignore = false;
+    }
+    this.render();
+  },
+  render() {
+    this.current = location.hash; const [a, b, c] = this.parse(), root = $("#root"); Admin.statusEl = null;
+    let page, nav = "home";
+    if (a === "admin") { if (!IS_LOCAL) { location.hash = "#/"; return; } nav = "admin"; page = b === "new" ? Admin.form(null) : b === "edit" ? Admin.form(c) : Admin.dashboard(); }
+    else if (a === "problem") { page = View.detail(b); nav = "problems"; }
+    else if (a === "problems") { page = h("div", { style: "margin-top:32px" }, View.browse()); nav = "problems"; }
+    else page = View.home();
+    const link = (key, href, label) => h("a", { href, "aria-current": nav === key ? "page" : null, text: label });
+    root.replaceChildren(h("header", { class: "top" }, h("div", { class: "wrap bar" }, h("a", { class: "brand", href: "#/" }, "Solve", h("b", { text: "Log" })),
+      h("nav", { "aria-label": "Main" }, link("home", "#/", "Home"), link("problems", "#/problems", "Problems"), IS_LOCAL && link("admin", "#/admin", "Admin")),
+      h("button", { class: "btn", type: "button", "aria-label": "Toggle light or dark theme", onclick: () => Theme.toggle() }, "Theme"))),
+      h("main", { class: "wrap", id: "main" }, page), h("footer", { class: "wrap", text: "SolveLog — a personal problem solving archive." }));
+    window.scrollTo(0, 0);
+  }
+};
+
+/* ---------- Boot ---------- */
+(async function main() {
+  Theme.init();
+  await Store.init();
+  window.addEventListener("hashchange", () => Router.onHashChange());
+  window.addEventListener("beforeunload", e => { if (IS_LOCAL && (Admin.formDirty || Store.unsafe)) { e.preventDefault(); e.returnValue = ""; } });
+  if (IS_LOCAL && !Storage.ok) Toast.show("Browser storage is unavailable. Changes live in memory — export before closing.", true);
+  Router.render();
+})();
+</script></body></html>
